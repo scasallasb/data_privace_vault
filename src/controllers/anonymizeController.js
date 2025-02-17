@@ -30,6 +30,7 @@ exports.unanonymize = async (req, res) => {
 };
 
 exports.secureChatGPT = async (req, res) => {
+    const apiKey = process.env.API_KEY;
     const { prompt } = req.body;
     if (!prompt) {
         return res.status(400).json({ error: 'Prompt is required' });
@@ -46,12 +47,12 @@ exports.secureChatGPT = async (req, res) => {
             max_tokens: 1000
         }, {
             headers: {
-                'Authorization': `Bearer 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`,
+                'Authorization': `Bearer ${apiKey}`,
                 'Content-Type': 'application/json'
             }
         });
 
-        // Unanonymize the response from ChatGPT
+        // Unanonymize the response from ChatGPT    
         const unanonymizedResponse = await unanonymizeMessage(response.data.choices[0].message.content);
 
         // Send the unanonymized response to the client
